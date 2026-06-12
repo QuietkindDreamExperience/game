@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quietkind Dream Journey</title>
+<title>DreamJourney</title>
 
 <style>
 body{
@@ -63,7 +63,7 @@ button{
 <div class="container">
 <div class="box">
 
-<h2>🌍 Dream Journey Engine</h2>
+<h2>🌍 DreamJourney Game</h2>
 
 <!-- HUD -->
 <div class="hud" id="hud" style="display:none;">
@@ -130,13 +130,11 @@ let game = {
   memory:[]
 };
 
-// 🌍 240+ COUNTRIES (ย่อไว้ แต่โครงพร้อมขยาย)
 const countries = [
 "Thailand","Japan","USA","France","Germany","Brazil",
 "India","China","UK","Canada","Italy","Spain"
 ];
 
-// load countries
 window.onload = () => {
   let o = document.getElementById("origin");
   let t = document.getElementById("target");
@@ -175,7 +173,6 @@ function go2(){
   show("s3");
 }
 
-// ⏳ DAY SYSTEM
 function nextDay(){
   game.day++;
 
@@ -183,18 +180,17 @@ function nextDay(){
 
   if(Math.random() < 0.5){
     game.coin += 5;
-    game.memory.push("Helped someone on the road");
+    game.memory.push("Helped someone");
     text = "You helped someone ❤️ +5 coins";
   }
 
   update(text);
 }
 
-// 🎯 MISSION SYSTEM
 function mission(){
   const missions = [
     {t:"Help a child study 📚", c:10},
-    {t:"Support local community 🏘️", c:12},
+    {t:"Support community 🏘️", c:12},
     {t:"Clean environment 🌱", c:15}
   ];
 
@@ -206,10 +202,9 @@ function mission(){
   update(m.t + " (+"+m.c+")");
 }
 
-// 😴 REST SYSTEM
 function rest(){
-  game.memory.push("Rested and recovered");
-  update("You rested 😴 + energy restored");
+  game.memory.push("Rested");
+  update("You rested 😴");
 }
 
 function update(text){
@@ -222,4 +217,3 @@ function update(text){
 
 </body>
 </html>
-
