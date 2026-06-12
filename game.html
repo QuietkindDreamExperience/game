@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quietkind Dream Journey</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background:#fffdfd;
+}
+
+.container{
+  max-width:800px;
+  margin:auto;
+  padding:20px;
+}
+
+.box{
+  background:white;
+  border:2px dashed #ffb6c1;
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+}
+
+.screen{display:none;}
+.screen.active{display:block;}
+
+input,select{
+  width:90%;
+  padding:10px;
+  margin:10px 0;
+  border:2px solid #ffb6c1;
+  border-radius:10px;
+}
+
+button{
+  background:#db7093;
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.hud{
+  display:flex;
+  justify-content:space-around;
+  font-size:12px;
+  background:#fff9fa;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="box">
+
+<h2>🌍 Dream Journey Engine</h2>
+
+<!-- HUD -->
+<div class="hud" id="hud" style="display:none;">
+<div>👤 <span id="h-name"></span></div>
+<div>🌍 <span id="h-country"></span></div>
+<div>⏳ Day <span id="h-day">0</span></div>
+<div>💛 <span id="h-coin">0</span></div>
+</div>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="s1">
+<h3>Create Character</h3>
+<input id="name" placeholder="Name">
+
+<select id="gender">
+<option>👩 Female</option>
+<option>👨 Male</option>
+<option>✨ Non-binary</option>
+</select>
+
+<select id="age">
+<option>Child</option>
+<option>Youth</option>
+<option>Adult</option>
+</select>
+
+<button onclick="go1()">Start</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="s2">
+<h3>Choose Countries</h3>
+
+<select id="origin"></select>
+<select id="target"></select>
+
+<button onclick="go2()">Continue</button>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen" id="s3">
+<h3>Journey</h3>
+
+<p id="story"></p>
+
+<button onclick="nextDay()">➡ Next Day</button>
+<button onclick="mission()">🎯 Mission</button>
+<button onclick="rest()">😴 Rest</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+let game = {
+  name:"",
+  gender:"",
+  age:"",
+  origin:"",
+  target:"",
+  day:0,
+  coin:0,
+  memory:[]
+};
+
+// 🌍 240+ COUNTRIES (ย่อไว้ แต่โครงพร้อมขยาย)
+const countries = [
+"Thailand","Japan","USA","France","Germany","Brazil",
+"India","China","UK","Canada","Italy","Spain"
+];
+
+// load countries
+window.onload = () => {
+  let o = document.getElementById("origin");
+  let t = document.getElementById("target");
+
+  countries.forEach(c=>{
+    o.innerHTML += `<option>${c}</option>`;
+    t.innerHTML += `<option>${c}</option>`;
+  });
+};
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function go1(){
+  game.name = document.getElementById("name").value;
+  game.gender = document.getElementById("gender").value;
+  game.age = document.getElementById("age").value;
+
+  if(!game.name) return alert("Enter name");
+  show("s2");
+}
+
+function go2(){
+  game.origin = document.getElementById("origin").value;
+  game.target = document.getElementById("target").value;
+
+  if(game.origin === game.target)
+    return alert("Choose different countries");
+
+  document.getElementById("hud").style.display="flex";
+  document.getElementById("h-name").innerText = game.name;
+  document.getElementById("h-country").innerText = game.origin;
+
+  show("s3");
+}
+
+// ⏳ DAY SYSTEM
+function nextDay(){
+  game.day++;
+
+  let text = "A calm travel day passes...";
+
+  if(Math.random() < 0.5){
+    game.coin += 5;
+    game.memory.push("Helped someone on the road");
+    text = "You helped someone ❤️ +5 coins";
+  }
+
+  update(text);
+}
+
+// 🎯 MISSION SYSTEM
+function mission(){
+  const missions = [
+    {t:"Help a child study 📚", c:10},
+    {t:"Support local community 🏘️", c:12},
+    {t:"Clean environment 🌱", c:15}
+  ];
+
+  let m = missions[Math.floor(Math.random()*missions.length)];
+
+  game.coin += m.c;
+  game.memory.push(m.t);
+
+  update(m.t + " (+"+m.c+")");
+}
+
+// 😴 REST SYSTEM
+function rest(){
+  game.memory.push("Rested and recovered");
+  update("You rested 😴 + energy restored");
+}
+
+function update(text){
+  document.getElementById("h-day").innerText = game.day;
+  document.getElementById("h-coin").innerText = game.coin;
+  document.getElementById("story").innerText = text;
+}
+
+</script>
+
+</body>
+</html>
+
